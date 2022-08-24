@@ -14,6 +14,8 @@
     </div>
   </div>
 
+  <div>{{ test }}</div>
+
   <div class="grid grid-auto-fit gap-4 py-8 px-3" v-if="countries">
     <div
       v-for="c in show()"
@@ -69,6 +71,7 @@ export default {
       error: "",
       countries: [],
       option: "",
+      test: this.$store.state.users[0].name
     };
   },
   methods: {
