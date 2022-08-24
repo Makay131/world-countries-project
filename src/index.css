@@ -1,0 +1,13 @@
+@import "./home.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-color {
+  @apply text-yellow-900 text-center;
+}
+
+.card {
+  @apply bg-slate-200/80 text-gray-700 min-h-fit shadow-lg rounded-md overflow-hidden;
+}
