@@ -14,11 +14,11 @@
     </div>
   </div>
 
-  <div>{{ test }}</div>
+  <div></div>
 
-  <div class="grid grid-auto-fit gap-4 py-8 px-3" v-if="countries">
+  <div class="grid grid-auto-fit gap-4 py-8 px-3" v-if="!getError">
     <div
-      v-for="c in show()"
+      v-for="c in getCountry"
       :key="c"
       class="card p-5 flex flex-col items-center"
     >
@@ -63,19 +63,23 @@
 
 <script>
 import { toRaw } from "vue";
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data() {
     return {
       lists: {},
-      error: "",
-      countries: [],
       option: "",
-      test: this.$store.state.users[0].name
     };
   },
+  computed: {
+    ...mapGetters({
+      getCountry: 'getCountries',
+      getError: 'getError',
+    })
+  },
   methods: {
-    show() {
+    /* show() {
       const rawObjectOrArray = toRaw(this.countries);
 
       if (this.option === "az") {
@@ -106,16 +110,14 @@ export default {
         return rawObjectOrArray;
       }
     },
+    */
 
     getCodeForFlag(code) {
       return `https://flagcdn.com/224x168/${code.toLowerCase()}.png`;
     },
   },
-  created() {
-    fetch("https://restcountries.com/v3.1/all")
-      .then((res) => res.json())
-      .then((data) => (this.countries = data))
-      .catch((err) => (this.error = err.message));
+  async created() {
+    await this.$store.dispatch('getCountries')
   },
 };
 </script>
