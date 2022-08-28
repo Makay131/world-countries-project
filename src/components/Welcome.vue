@@ -2,7 +2,7 @@
   <div id="menu">
     <div id="menu-items">
       <div class="menu-item">Home</div>
-      <div class="menu-item">Shop</div>
+      <div class="menu-item"><router-link :to="{name: 'Learning'}">Learn</router-link></div>
       <div class="menu-item">About</div>
       <div class="menu-item">Contact Us</div>
     </div>

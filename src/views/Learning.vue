@@ -1,4 +1,5 @@
 <template>
+  <Navbar />
   <div class="flex items-center justify-center gap-4 mt-5">
     <label for="order" class="text-sm font-medium text-slate-500">Order</label>
     <div>
@@ -18,7 +19,7 @@
 
   <div class="grid grid-auto-fit gap-4 py-8 px-3" v-if="!getError">
     <div
-      v-for="c in getCountry"
+      v-for="c in filterCountryList"
       :key="c"
       class="card p-5 flex flex-col items-center"
     >
@@ -62,62 +63,68 @@
 </template>
 
 <script>
-import { toRaw } from "vue";
-import { mapActions, mapGetters } from 'vuex'
+
+import { mapActions, mapGetters } from 'vuex';
+import Navbar from '../components/Navbar.vue';
 
 export default {
   data() {
     return {
       lists: {},
-      option: "",
+      option: "az",
     };
+  },
+  components: {
+    Navbar
   },
   computed: {
     ...mapGetters({
       getCountry: 'getCountries',
       getError: 'getError',
-    })
+      getCountriesAtoZ: 'getCountriesAtoZ',
+      getCountriesZtoA: 'getCountriesZtoA'
+    }),
+    filterCountryList() {
+      switch (this.option) {
+        case 'az':
+          return this.getCountriesAtoZ;
+          break;
+        case "za":
+          return this.getCountriesZtoA;
+          break;
+        case 'random':
+          return this.shuffleCountryList(this.getCountry);
+          break;
+        default:
+      return this.getCountry;
+      
+    }
+    },
   },
   methods: {
-    /* show() {
-      const rawObjectOrArray = toRaw(this.countries);
-
-      if (this.option === "az") {
-        const last = rawObjectOrArray.sort(function (a, b) {
-          if (a.name.common < b.name.common) {
-            return -1;
-          }
-          if (a.name.common > b.name.common) {
-            return 1;
-          }
-          return 0;
-        });
-        return last;
-      } else if (this.option === "za") {
-        const last = rawObjectOrArray.sort(function (a, b) {
-          if (a.name.common < b.name.common) {
-            return 1;
-          }
-          if (a.name.common > b.name.common) {
-            return -1;
-          }
-          return 0;
-        });
-        return last;
-      } else if (this.option === "random") {
-        return rawObjectOrArray;
-      } else {
-        return rawObjectOrArray;
-      }
-    },
-    */
-
+    shuffleCountryList(array) {
+        let currentIndex = array.length,  randomIndex;
+      
+        // While there remain elements to shuffle.
+        while (currentIndex != 0) {
+      
+          // Pick a remaining element.
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex--;
+      
+          // And swap it with the current element.
+          [array[currentIndex], array[randomIndex]] = [
+            array[randomIndex], array[currentIndex]];
+        }
+      
+        return array;
+      },
     getCodeForFlag(code) {
       return `https://flagcdn.com/224x168/${code.toLowerCase()}.png`;
     },
   },
   async created() {
-    await this.$store.dispatch('getCountries')
+    await this.$store.dispatch('getCountries');
   },
 };
 </script>

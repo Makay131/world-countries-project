@@ -11,7 +11,29 @@ const store = createStore({
       },
       getError(state) {
         return state.error;
-      }
+      },
+      getCountriesAtoZ(state) {
+        return state.countries[0]?.sort(function (a, b) {
+          if (a.name.common < b.name.common) {
+            return -1;
+          }
+          if (a.name.common > b.name.common) {
+            return 1;
+          }
+          return 0;
+        });
+      },
+      getCountriesZtoA(state) {
+        return state.countries[0]?.sort(function (a, b) {
+          if (a.name.common < b.name.common) {
+            return 1;
+          }
+          if (a.name.common > b.name.common) {
+            return -1;
+          }
+          return 0;
+        });
+      },
     },
     mutations: {
       setLanguages(state, payload) {
@@ -19,6 +41,9 @@ const store = createStore({
       },
       setError(state, payload) {
         state.error = payload;
+      },
+      setData(state, payload) {
+        state.option = payload;
       }
     },
     actions: {
@@ -32,7 +57,7 @@ const store = createStore({
             commit('setError', err.message);
           });
       
-    }
+    },
   },
     modules: {  },
   });
